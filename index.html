@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music</title>
+    <link rel="icon" href="BEATS (1).png" type="image/x-icon">
+    <style>
+        body {
+            background-color: black;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+        .icon {
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            transition: transform 0.2s ease; /* Płynne przejście przy transformacji */
+        }
+        /* Efekt kliknięcia */
+        .icon:active {
+            transform: scale(0.9); /* Zmniejszenie do 90% oryginalnego rozmiaru */
+        }
+        .container {
+            display: flex;
+            flex-direction: column; /* Ustawia elementy w kolumnie */
+            align-items: center;
+        }
+        .track-container {
+            display: flex; /* Ustawia elementy w wierszu */
+            align-items: center; /* Wyśrodkowanie w pionie */
+            margin-bottom: 20px; /* Odstęp między zestawami przycisków i pasków */
+        }
+        .progress-bar {
+            width: 300px;
+            height: 10px;
+            margin-left: 10px; /* Odstęp od przycisku */
+            background-color: grey; /* Kolor tła, gdy muzyka nie gra */
+        }
+        /* Kolor paska postępu, gdy muzyka gra */
+        .progress-bar.playing {
+            background-color: grey; /* Kolor tła paska, gdy muzyka gra */
+        }
+        /* Kolor paska postępu dla przeglądarek opartych na Webkit (Chrome, Opera) */
+        .progress-bar::-webkit-progress-value {
+            background-color: white; /* Ustaw biały kolor paska postępu */
+        }
+        /* Kolor paska postępu dla Firefox */
+        .progress-bar::-moz-progress-bar {
+            background-color: white; /* Ustaw biały kolor paska postępu */
+        }
+        /* Dla przeglądarek, które nie wspierają pseudoelementów, zdefiniuj kolor tła */
+        .progress-bar {
+            background-color: grey; /* Kolor tła paska */
+        }
+        /* Styl dla wyświetlania czasu */
+        .time-display {
+            margin-left: 10px;
+            font-family: Andale Mono, sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+    <img src="BEATS (1).png" alt="Logo" style="width: 200px; margin-bottom: 20px;">
+    <br><br>
+    <div class="container">
+        <!-- Pierwszy zestaw przycisku i paska -->
+        <div class="track-container">
+            <img src="ic_play_circle_filled_white_48px-512.webp" class="icon" id="icon1" onclick="playMusic(1)" alt="Ikona muzyki">
+            <progress id="progressBar1" class="progress-bar" value="0" max="100"></progress>
+            <span id="timeDisplay1" class="time-display">0:00</span>
+        </div>
+<br>
+        <!-- Drugi zestaw przycisku i paska -->
+        <div class="track-container">
+            <img src="ic_play_circle_filled_white_48px-512.webp" class="icon" id="icon2" onclick="playMusic(2)" alt="Ikona muzyki">
+            <progress id="progressBar2" class="progress-bar" value="0" max="100"></progress>
+            <span id="timeDisplay2" class="time-display">0:00</span>
+        </div>
+        <br>
+        <div class="track-container">
+            <img src="ic_play_circle_filled_white_48px-512.webp" class="icon" id="icon4" onclick="playMusic(4)" alt="Ikona muzyki">
+            <progress id="progressBar4" class="progress-bar" value="0" max="100"></progress>
+            <span id="timeDisplay4" class="time-display">0:00</span>
+        </div>
+        <br>
+        <div class="track-container">
+            <img src="ic_play_circle_filled_white_48px-512.webp" class="icon" id="icon5" onclick="playMusic(5)" alt="Ikona muzyki">
+            <progress id="progressBar5" class="progress-bar" value="0" max="100"></progress>
+            <span id="timeDisplay5" class="time-display">0:00</span>
+        </div>
+        <br>
+        <div class="track-container">
+            <img src="ic_play_circle_filled_white_48px-512.webp" class="icon" id="icon5" onclick="playMusic(6)" alt="Ikona muzyki">
+            <progress id="progressBar6" class="progress-bar" value="0" max="100"></progress>
+            <span id="timeDisplay6" class="time-display">0:00</span>
+        </div>
+    </div>
+
+    <audio id="audioPlayer1" src="HARDAFBEAT.mp3"></audio>
+    <audio id="audioPlayer2" src="ketamine typebeat.mp3"></audio>
+    <audio id="audioPlayer4" src="macdonaldbeat.mp3"></audio>
+    <audio id="audioPlayer5" src="samplebeat.mp3"></audio>
+    <audio id="audioPlayer6" src="goodassbeat.mp3"></audio>
+
+    <script>
+        // Zmienna do przechowywania aktualnie aktywnego odtwarzacza
+        var activePlayer = null;
+
+        // Funkcja obsługująca odtwarzanie dla każdego utworu
+        function playMusic(playerNumber) {
+            var audio = document.getElementById("audioPlayer" + playerNumber);
+            var progressBar = document.getElementById("progressBar" + playerNumber);
+            var icon = document.getElementById("icon" + playerNumber);
+
+            // Sprawdź, czy gra inny utwór i zatrzymaj go
+            if (activePlayer !== null && activePlayer !== playerNumber) {
+                document.getElementById("audioPlayer" + activePlayer).pause();
+                document.getElementById("progressBar" + activePlayer).classList.remove("playing");
+                document.getElementById("icon" + activePlayer).src = "ic_play_circle_filled_white_48px-512.webp"; // Przywrócenie ikony play
+            }
+
+            // Sprawdź, czy muzyka gra i odpowiednio zaktualizuj stan
+            if (audio.paused) {
+                audio.play();  // Odtwarzanie muzyki
+                progressBar.classList.add("playing"); // Dodanie klasy, gdy muzyka gra
+                icon.src = "Bez nazwy.png"; // Zmiana ikony na stop
+                activePlayer = playerNumber; // Ustaw aktywny odtwarzacz
+            } else {
+                audio.pause(); // Zatrzymywanie muzyki
+                progressBar.classList.remove("playing"); // Usunięcie klasy, gdy muzyka nie gra
+                icon.src = "ic_play_circle_filled_white_48px-512.webp"; // Zmiana ikony z powrotem na play
+                activePlayer = null; // Resetuj aktywnego odtwarzacza
+            }
+        }
+
+        // Funkcja formatująca czas do postaci minut i sekund
+        function formatTime(seconds) {
+            var minutes = Math.floor(seconds / 60);
+            var seconds = Math.floor(seconds % 60);
+            if (seconds < 10) {
+                seconds = '0' + seconds; // Dodaj 0 przed jednocyfrowymi sekundami
+            }
+            return minutes + ':' + seconds;
+        }
+
+        // Aktualizacja paska postępu i wyświetlania czasu dla każdego utworu
+        function updateProgressBar(playerNumber) {
+            var audio = document.getElementById("audioPlayer" + playerNumber);
+            var progressBar = document.getElementById("progressBar" + playerNumber);
+            var timeDisplay = document.getElementById("timeDisplay" + playerNumber);
+
+            audio.addEventListener('timeupdate', function() {
+                var progress = (audio.currentTime / audio.duration) * 100;
+                progressBar.value = progress;
+                timeDisplay.textContent = formatTime(audio.currentTime);
+            });
+
+            // Obsługa kliknięcia na pasku postępu dla danego odtwarzacza
+            progressBar.addEventListener('click', function(event) {
+                var rect = progressBar.getBoundingClientRect();
+                var offsetX = event.clientX - rect.left;
+                var width = rect.width;
+                var newTime = (offsetX / width) * audio.duration;
+                audio.currentTime = newTime;
+
+                // Sprawdź, czy inny utwór gra
+                if (activePlayer !== null && activePlayer !== playerNumber) {
+                    document.getElementById("audioPlayer" + activePlayer).pause();
+                    document.getElementById("progressBar" + activePlayer).classList.remove("playing");
+                    document.getElementById("icon" + activePlayer).src = "ic_play_circle_filled_white_48px-512.webp"; // Przywrócenie ikony play
+                }
+
+                // Jeśli audio jest zatrzymane, rozpocznij odtwarzanie
+                if (audio.paused) {
+                    audio.play();
+                    progressBar.classList.add("playing");
+                    document.getElementById("icon" + playerNumber).src = "Bez nazwy.png";
+                    activePlayer = playerNumber; // Ustaw aktywny odtwarzacz
+                }
+            });
+        }
+
+        // Inicjalizacja dla każdego utworu
+        updateProgressBar(1);
+        updateProgressBar(2);
+        updateProgressBar(4);
+        updateProgressBar(5);
+        updateProgressBar(6);
+    </script>
+</body>
+</html>
